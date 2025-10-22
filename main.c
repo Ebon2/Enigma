@@ -16,10 +16,11 @@ int main() {
 
     // ReSharper disable once CppDFAConstantConditions
     if (!comproveBarrels())
-        return 0;
+        return 1;
 
     printf("Enter the work: ");
     fgets(work, MAXCHAR, stdin);
+    work[strlen(work) - 1] = '\0';
 
     const int len = (int) strlen(work);
 
@@ -31,7 +32,7 @@ int main() {
     strcpy(uncriptedWork, encriptedWork);
     uncripter(uncriptedWork, len);
 
-    printf("Encripted work: %skey: %d-%d-%d\n", encriptedWork, BARREL_A, BARREL_B, BARREL_C);
+    printf("Encripted work: %s\n", encriptedWork);
     printf("Normal work: %s", uncriptedWork);
 
     return 0;

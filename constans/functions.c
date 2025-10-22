@@ -6,6 +6,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "barrels.h"
 #include "defines.h"
@@ -79,29 +80,61 @@ inline void encripter(char work[], const int len){
         work[i] = conection(work[i], BARREL_A);
         work[i] = changeChar(work[i], barrelA);
     }
+    addKeys(work);
 }
 
-inline void uncripter(char work[], const int len){
+inline void addKeys(char work[]) {
+    char aux[2];
+    aux[1] = '\0';
+
+    aux[0] = (char)(BARREL_A+64);
+    strcat(work, aux);
+
+    aux[0] = (char)(BARREL_B+64);
+    strcat(work, aux);
+
+    aux[0] = (char)(BARREL_C+64);
+    strcat(work, aux);
+}
+
+int* getKeys(char work[], const int len) {
+    static int keys[3];
+
+    keys[2] = (int)work[len+2] - 64;
+    work[len+2] = '\0';
+
+    keys[1] = (int)work[len+1] - 64;
+    work[len+1] = '\0';
+
+    keys[0] = (int)work[len] - 64;
+    work[len] = '\0';
+
+    return keys;
+}
+
+inline void uncripter(char work[], int len){
+    int *keys = getKeys(work, len);
+
     for(int i=0; i<len; i++){
         if (work[i] == '\0' || work[i] == '\n') break;
 
         work[i] = unchangeChar(work[i], barrelA);
-        work[i] = inverseConection(work[i], BARREL_A);
+        work[i] = inverseConection(work[i], keys[0]);
         work[i] = unchangeChar(work[i], barrelB);
 
-        work[i] = inverseConection(work[i], BARREL_B);
+        work[i] = inverseConection(work[i], keys[1]);
         work[i] = unchangeChar(work[i], barrelC);
 
-        work[i] = inverseConection(work[i], BARREL_C);
+        work[i] = inverseConection(work[i], keys[2]);
         work[i] = unchangeChar(work[i], reflector);
 
-        work[i] = inverseConection(work[i], BARREL_C);
+        work[i] = inverseConection(work[i], keys[2]);
         work[i] = unchangeChar(work[i], barrelC);
 
-        work[i] = inverseConection(work[i], BARREL_B);
+        work[i] = inverseConection(work[i], keys[1]);
         work[i] = unchangeChar(work[i], barrelB);
 
-        work[i] = inverseConection(work[i], BARREL_A);
+        work[i] = inverseConection(work[i], keys[0]);
         work[i] = unchangeChar(work[i], barrelA);
     }
 }

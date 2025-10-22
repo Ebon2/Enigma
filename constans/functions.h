@@ -17,6 +17,7 @@ char inverseConection(char, int);
 void encripter(char[], int);
 void uncripter(char[], int);
 
+void addKeys(char[]);
 void upper(char[]);
 int comproveBarrels();
 

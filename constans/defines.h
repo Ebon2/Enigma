@@ -7,8 +7,8 @@
 
 #define MAXCHAR 256
 
-#define BARREL_A 6
-#define BARREL_B 3
-#define BARREL_C 23
+#define BARREL_A 18
+#define BARREL_B 15
+#define BARREL_C 22
 
 #endif
