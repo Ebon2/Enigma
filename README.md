@@ -13,7 +13,7 @@ output.
 1. Clone the repository
 2. Compile the program using a C compiler:
    ```bash
-   gcc main.c constans/functions.c -o enigma
+   gcc src/*.c -o enigma
    ```
 3. Run the compiled program:
    ```bash

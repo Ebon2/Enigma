@@ -2,15 +2,15 @@
 // Created by angelrojas on 21/10/25.
 //
 
-#include "functions.h"
+#include "../imports/functions.h"
 
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "barrels.h"
-#include "defines.h"
-#include "structures.h"
+#include "../imports/barrels.h"
+#include "../imports/defines.h"
+#include "../imports/structures.h"
 
 inline char changeChar(const char letter, const Comb barrel[]){
     int i=0;

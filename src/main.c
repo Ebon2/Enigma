@@ -2,8 +2,8 @@
 // Created by angelrojas on 21/10/25.
 //
 
-#include "constans/defines.h"
-#include "constans/functions.h"
+#include "../imports/defines.h"
+#include "../imports/functions.h"
 
 #include <stdio.h>
 #include <string.h>

@@ -3,9 +3,10 @@ project(Enigma C)
 
 set(CMAKE_C_STANDARD 11)
 
-include_directories(constans)
+include_directories(src)
+
 add_executable(Enigma
-        main.c
-        constans/barrels.c
-        constans/functions.c
+        src/main.c
+        src/barrels.c
+        src/functions.c
 )
