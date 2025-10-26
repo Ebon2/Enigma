@@ -2,7 +2,7 @@
 // Created by angelrojas on 21/10/25.
 //
 
-#include "barrels.h"
+#include "../imports/barrels.h"
 
 const Comb barrelA[27] = {
     {'A', 'X'}, {'B', 'G'}, {'C', 'Y'}, {'D', 'S'},
