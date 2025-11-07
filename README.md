@@ -48,3 +48,5 @@ All barrel values must be between 1 and 26 to represent valid letter shifts.
     - Reflector
     - Reverse path through all barrels
 3. The final output includes the barrel positions as validation keys
+
+# *gutenmouguen*
