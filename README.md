@@ -10,23 +10,65 @@ output.
 
 ## Installation
 
-1. Clone the repository
-2. Compile the program using a C compiler:
+Using CMake (recommended):
+
+1. Configure and build
    ```bash
-   gcc src/*.c -o enigma
+   cmake -S . -B build
+   cmake --build build
    ```
-3. Run the compiled program:
+2. Install
    ```bash
-   ./enigma
+   sudo cmake --install build
    ```
+   - The executable will be installed to: /usr/local/bin/enigma (default prefix)
+   - The data files from ./bin (barrels_BIN, modifiers_BIN) will be installed to: ~/.local/share/enigma
+
+Notes:
+- If you prefer a different system prefix, set it when configuring, for example:
+  ```bash
+  cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/usr/local
+  ```
+- You can also install without sudo by choosing a writable prefix (e.g., your home):
+  ```bash
+  cmake -S . -B build -DCMAKE_INSTALL_PREFIX="$HOME/.local"
+  cmake --build build
+  cmake --install build
+  # Ensure ~/.local/bin is in your PATH
+  ```
 
 ## Usage
 
-1. Launch the program
-2. Enter the text you want to encrypt when prompted
-3. The program will display both the encrypted text and verify the decryption process
+Command-line options:
 
-The encrypted output will include three characters at the end representing the barrel positions used for encryption.
+```
+ enigma [options]
+
+ Options:
+   -h, --help           Show this help and exit
+   -v, --version        Show version information and exit
+   -f, --file <path>    Input file to process (required)
+   -o, --output <path>  Output file path (default: output.txt)
+   -l, --level <n>      Security level: 1=LOW, 2=HIGH, 3=EXTREME
+   -d, --decrypt        Decrypt mode (default is encrypt)
+```
+
+Examples:
+- Encrypt with level 2:
+  ```bash
+  enigma -f input.txt -o out.txt -l 2
+  ```
+- Decrypt:
+  ```bash
+  enigma --decrypt --file cipher.txt --output plain.txt
+  ```
+
+Data files search order for barrels/modifiers:
+1) Relative: ../bin/{barrels_BIN, modifiers_BIN}
+2) User: $HOME/.local/share/enigma/{barrels_BIN, modifiers_BIN}
+3) System: /usr/local/share/enigma/{barrels_BIN, modifiers_BIN}
+
+Notes below describe the algorithmic behavior. The encrypted output will include three characters at the end representing the barrel positions used for encryption.
 
 ## Configuration
 

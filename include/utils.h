@@ -7,7 +7,7 @@
 
 void u_process_args(int argc, char *argv[]);
 void u_process_file();
-
+void u_select_paths();
 void u_change_barrels();
 
 #endif //ENIGMA_UTILS_H
