@@ -10,18 +10,16 @@
 
 
 int main(const int argc, char *argv[]) {
+    u_select_paths();
     u_process_args(argc, argv);
 
-    if (!g_file_name) {
-        printf("ERROR");
-        return 1;
-    }
+
     import_barrels();
     import_modifiers();
 
     u_process_file();
 
-    comprove_barrels();
+    check_barrels();
     if (g_mode == ENCRYPT)
         encrypt();
     else if (g_mode == DECRYPT)

@@ -7,7 +7,7 @@
 
 void encrypt();
 void decrypt();
-int comprove_barrels();
+int check_barrels();
 
 #endif
 //functions

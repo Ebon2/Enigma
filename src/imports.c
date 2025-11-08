@@ -12,10 +12,14 @@ static int_comb_t s_barrel_b [ALPHA_LEN];
 static int_comb_t s_barrel_c [ALPHA_LEN];
 static int_comb_t s_reflector [ALPHA_LEN];
 
-static void change_char();
+static void s_change_char();
 
 void import_barrels() {
-    FILE *file = fopen(BARRELS_BIN, "rb");
+    FILE *file = fopen(g_path_barrels, "rb");
+    if (!file) {
+        perror("Error opening barrels file");
+        return;
+    }
 
     fread(s_barrel_a, sizeof(int_comb_t), ALPHA_LEN, file);
     fread(s_barrel_b, sizeof(int_comb_t), ALPHA_LEN, file);
@@ -24,11 +28,15 @@ void import_barrels() {
 
     fclose(file);
 
-    change_char();
+    s_change_char();
 }
 
 void import_modifiers() {
-    FILE *file = fopen(MODIFIERS_BIN, "rb");
+    FILE *file = fopen(g_path_modifier, "rb");
+    if (!file) {
+        perror("Error opening modifiers file");
+        return;
+    }
 
     fread(&g_barrel_a_modifier, sizeof(int), 1, file);
     fread(&g_barrel_b_modifier, sizeof(int), 1, file);
@@ -37,7 +45,7 @@ void import_modifiers() {
     fclose(file);
 }
 
-static void change_char() {
+static void s_change_char() {
     for (int i = 0; i < ALPHA_LEN; i++) {
         g_barrel_a[i].input = (char)s_barrel_a[i].input;
         g_barrel_a[i].output = (char)s_barrel_a[i].output;
