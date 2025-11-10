@@ -196,12 +196,6 @@ static char s_inverse_connection(char letter, const int move){
     return letter;
 }
 
-static void upper(char arr[]){
-    for(int i=0; arr[i]!='\0'; i++)
-        arr[i] = (char)toupper(arr[i]);
-}
-
-
 static void s_lower_encrypt() {
     s_add_keys();
 
@@ -275,7 +269,7 @@ static void s_extreme_decrypt() {
     } while (c != EOF);
 }
 
-void s_add_level() {
+static void s_add_level() {
     switch (g_actual_level) {
         case LOW:
             fputs("LW", g_output_file);

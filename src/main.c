@@ -1,6 +1,14 @@
-//
-// Created by angelrojas on 21/10/25.
-//
+/**
+ * @file main.c
+ * @brief This file contains the main entry point for the program.
+ * @author Angel Rojas
+ * @date 2024-11-10
+ * @version 1.1
+ * @details
+ * This file serves as the primary entry point for the program, orchestrating
+ * the execution flow and coordinating various components such as file processing,
+ * argument handling, and encryption/decryption operations.
+ */
 
 #include "../include/core.h"
 #include "../include/globals.h"

@@ -1,6 +1,14 @@
-//
-// Created by angelrojas on 06/11/25.
-//
+/**
+ * @file globals.h
+ * @brief This file contains global variables and constants used throughout the program.
+ * @author Angel Rojas
+ * @date 2024-11-10
+ * @version 1.1
+ * @details
+ * This file serves as a repository for global variables and constants that are used
+ * across multiple parts of the program. It includes definitions for barrel and
+ * reflector configurations, file paths, and other program-wide settings.
+ */
 
 #ifndef ENIGMA_GLOBALS_H
 #define ENIGMA_GLOBALS_H
