@@ -17,6 +17,15 @@
 #include "../include/utils.h"
 
 
+/**
+ * The entry point of the program. This function initializes necessary resources,
+ * processes command-line arguments, imports required components, and executes
+ * the desired encryption or decryption operation.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv The array containing command-line arguments.
+ * @return Returns 0 if the program executes successfully.
+ */
 int main(const int argc, char *argv[]) {
     u_select_paths();
     u_process_args(argc, argv);

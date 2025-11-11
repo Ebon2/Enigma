@@ -14,7 +14,8 @@
 #define structures_H
 
 /**
- * @brief Enumerates different levels of encryption or decryption.
+ * @enum mod_t
+ * @brief Enumerates encryption or decryption.
  */
 typedef enum {
     ENCRYPT, /**< Encryption mode. */
@@ -22,6 +23,7 @@ typedef enum {
 } mod_t;
 
 /**
+ * @enum level_t
  * @brief Enumerates different levels of encryption or decryption.
  */
 typedef enum {
@@ -32,6 +34,7 @@ typedef enum {
 } level_t;
 
 /**
+ * @struct comb_t
  * @brief Represents a character combination for encryption or decryption.
  */
 typedef struct {
@@ -40,11 +43,12 @@ typedef struct {
 } comb_t;
 
 /**
+ * @struct int_comb_t
  * @brief Represents a character combination for encryption or decryption in format int.
  */
 typedef struct {
-    int input; /**< Represents a single character input to be processed. */
-    int output; /**< Represents a single character output resulting from processing. */
+    int input; /**< Represents a single character input to be processed in format int. */
+    int output; /**< Represents a single character output resulting from processing in format int. */
 } int_comb_t;
 
 #endif

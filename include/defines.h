@@ -22,7 +22,7 @@
 
 // Application metadata
 #define APP_NAME "enigma"
-#define APP_VERSION "1.0.0"
+#define APP_VERSION "1.1.0"
 
 // System-wide data directory (when installed globally)
 #define SYSTEM_DATA_DIR "/usr/local/share/enigma"
