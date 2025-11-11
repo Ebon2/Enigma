@@ -1,5 +1,5 @@
 /**
- * @file core.c
+ * @file core.h
  * @brief This file contains the main entry point for the program.
  * @author Angel Rojas
  * @date 2024-11-10
@@ -8,7 +8,6 @@
  * This file contains the main entry point for the program, orchestrating
  * the execution flow and coordinating various components such as file processing,
  * argument handling, and encryption/decryption operations.
- * @
  */
 
 #ifndef functions_H
