@@ -5,7 +5,8 @@ decryption.
 
 ## Description
 
-This program implements a text encryption system inspired by the Enigma machine, using three configurable barrels (rotors) and a reflector. It processes input text through multiple encryption stages to produce a secure encrypted
+This program implements a text encryption system inspired by the Enigma machine, using three configurable barrels 
+(rotors) and a reflector. It processes input text through multiple encryption stages to produce a secure encrypted
 output.
 
 ## Installation
@@ -45,12 +46,14 @@ Command-line options:
  enigma [options]
 
  Options:
-   -h, --help           Show this help and exit
-   -v, --version        Show version information and exit
-   -f, --file <path>    Input file to process (required)
-   -o, --output <path>  Output file path (default: output.txt)
-   -l, --level <n>      Security level: 1=LOW, 2=HIGH, 3=EXTREME
-   -d, --decrypt        Decrypt mode (default is encrypt)
+   -h, --help              Show this help and exit
+   -v, --version           Show version information and exit
+   -f, --file <path>       Input file to process (required)
+   -o, --output <path>     Output file path (default: output.txt)
+   -l, --level <n>         Security level: 1=LOW, 2=HIGH, 3=EXTREME
+   -d, --decrypt           Decrypt mode (default is encrypt)
+   -p, --paragraph <text>  Use the terminal input to encrypt or decrypt
+       --no-output-file    No save output file
 ```
 
 Examples:
@@ -68,7 +71,8 @@ Data files search order for barrels/modifiers:
 2) User: $HOME/.local/share/enigma/{barrels_BIN, modifiers_BIN}
 3) System: /usr/local/share/enigma/{barrels_BIN, modifiers_BIN}
 
-Notes below describe the algorithmic behavior. The encrypted output will include three characters at the end representing the barrel positions used for encryption.
+Notes below describe the algorithmic behavior. The encrypted output will include three characters at the end
+representing the barrel positions used for encryption.
 
 ## Configuration
 

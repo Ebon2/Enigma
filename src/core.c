@@ -17,7 +17,7 @@ static void s_higher_encrypt();
 static void s_extreme_encrypt();
 
 static void s_add_level();
-static void s_get_level();
+static void s_add_keys();
 
 static char s_encrypter(char letter);
 static char s_change_char(char letter, const comb_t barrel[]);
@@ -28,7 +28,7 @@ static void s_lower_decrypt();
 static void s_higher_decrypt();
 static void s_extreme_decrypt();
 
-static void s_add_keys();
+static void s_get_level();
 static void s_get_keys();
 
 static char s_decrypter(char letter);
