@@ -34,6 +34,14 @@ int main(const int argc, char *argv[]) {
     import_barrels();
     import_modifiers();
 
+    if (g_paragraph) {
+        if (g_input_file_name)
+            u_create_file(g_input_file_name);
+        else
+            u_create_file("input.txt");
+
+    }
+
     u_process_file();
 
     check_barrels();
@@ -41,6 +49,26 @@ int main(const int argc, char *argv[]) {
         encrypt();
     else if (g_mode == DECRYPT)
         decrypt();
+
+    int c;
+    rewind(g_output_file);
+
+    if (g_paragraph)
+        while ((c = fgetc(g_output_file)) != EOF)
+            printf("%c", c);
+
+    if (!g_make_output_file) {
+        if (!g_output_file_name)
+            remove("output.txt");
+        else
+            remove(g_output_file_name);
+    }
+
+
+    if (!g_input_file_name)
+        remove("input.txt");
+    else
+        remove(g_input_file_name);
 
     return 0;
 }

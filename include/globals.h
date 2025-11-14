@@ -99,4 +99,8 @@ extern mod_t g_mode;
  */
 extern level_t g_actual_level;
 
+extern int g_make_output_file;
+extern int g_paragraph;
+
+extern char g_input_paragraph[MAX_CHAR];
 #endif //ENIGMA_GLOBALS_H

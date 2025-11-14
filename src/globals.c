@@ -28,3 +28,8 @@ char g_path_modifier[PATH_MAX_LEN];
 mod_t g_mode = ENCRYPT;
 level_t g_actual_level = LOW;
 
+int g_make_output_file = 1;
+int g_paragraph = 0;
+
+char g_input_paragraph[MAX_CHAR];
+

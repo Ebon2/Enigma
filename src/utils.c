@@ -25,7 +25,9 @@ static struct option long_options[] = {
     {"file", required_argument, NULL, 'f'},
     {"output", required_argument, NULL, 'o'},
     {"level", required_argument, NULL, 'l'},
+    {"paragraph", required_argument, NULL, 'p'},
     {"decrypt", no_argument, NULL, 'd'},
+    {"no-output-file", no_argument, &g_make_output_file, 0},
 };
 
 void u_process_args(const int argc, char *argv[]) {
@@ -33,13 +35,13 @@ void u_process_args(const int argc, char *argv[]) {
     int option_index = 0;
     int opt;
 
-    while (opt = getopt_long(argc, argv, "hvf:o:l:d", long_options, &option_index), opt != -1)
+    while (opt = getopt_long(argc, argv, "hvf:o:l:p:d", long_options, &option_index), opt != -1)
         s_init_globals(opt);
 }
 
 void u_process_file() {
     g_input_file = fopen(g_input_file_name, "r");
-    g_output_file = fopen(g_output_file_name, "w");
+    g_output_file = fopen(g_output_file_name, "w+");
 
     if (g_input_file == NULL) {
         printf("Error opening file 1\n");
@@ -54,6 +56,18 @@ void u_process_file() {
 void u_select_paths() {
     s_modifiers_path();
     s_barrels_path();
+
+}
+
+void u_create_file(char name[]) {
+    FILE *file = fopen(name, "w");
+    if (file != NULL) {
+        g_input_file_name = malloc(strlen(name) + 1);
+        strcpy(g_input_file_name, name);
+
+        fputs(g_input_paragraph, file);
+        fclose(file);
+    }
 
 }
 
@@ -105,9 +119,12 @@ static void s_init_globals(const int opt) {
             g_mode = DECRYPT;
             break;
 
-        default:
-            printf("Unknown option: %c\n", opt);
+        case 'p':
+            g_paragraph = 1;
+            strcpy(g_input_paragraph, optarg);
             break;
+
+        default: break;
     }
 }
 
@@ -182,12 +199,14 @@ static void s_help() {
     printf("Usage:\n");
     printf("  %s [options]\n\n", APP_NAME);
     printf("Options:\n");
-    printf("  -h, --help           Show this help and exit\n");
-    printf("  -v, --version        Show version information and exit\n");
-    printf("  -f, --file <path>    Input file to process (required)\n");
-    printf("  -o, --output <path>  Output file path (default: output.txt)\n");
-    printf("  -l, --level <n>      Security level: 1=LOW, 2=HIGH, 3=EXTREME\n");
-    printf("  -d, --decrypt        Decrypt mode (default is encrypt)\n\n");
+    printf("  -h, --help              Show this help and exit\n");
+    printf("  -v, --version           Show version information and exit\n");
+    printf("  -f, --file <path>       Input file to process (required)\n");
+    printf("  -o, --output <path>     Output file path (default: output.txt)\n");
+    printf("  -l, --level <n>         Security level: 1=LOW, 2=HIGH, 3=EXTREME\n");
+    printf("  -d, --decrypt           Decrypt mode (default is encrypt)\n");
+    printf("  -p, --paragraph <text>  Use the terminal input to encrypt or decrypt\n");
+    printf("      --no-output-file    No save output file\n\n");
 
     printf("Data search order for barrels/modifiers files:\n");
     printf("  1) Relative: %s/{%s,%s}\n", REL_DATA_DIR, BARRELS_FILE, MODIFIERS_FILE);

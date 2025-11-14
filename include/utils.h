@@ -55,4 +55,5 @@ void u_select_paths();
  */
 void u_change_barrels();
 
+void u_create_file(char name[]);
 #endif //ENIGMA_UTILS_H
