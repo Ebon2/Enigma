@@ -7,15 +7,15 @@
 
 #include <stdio.h>
 
-void export_barrels() {
-    FILE *file = fopen(g_path_barrels, "wb");
+void export_rotors() {
+    FILE *file = fopen(g_path_rotors, "wb");
     if (!file) {
-        perror("Error opening barrels file for writing");
+        perror("Error opening rotors file for writing");
         return;
     }
 
-    for (int i = 0; i < 4; i++)
-        fwrite(g_barrels[i], sizeof(comb_t), ALPHA_LEN, file);
+    for (int i = 0; i < MAX_ROTORS; i++)
+        fwrite(g_rotors[i], sizeof(comb_t), ALPHA_LEN, file);
 
     fclose(file);
 }
@@ -26,7 +26,7 @@ void export_modifiers() {
         perror("Error opening modifiers file for writing");
         return;
     }
-    fwrite(g_barrels_modifier, sizeof(int), 4, file);
+    fwrite(g_rotors_modifier, sizeof(int), MAX_ROTORS-1, file);
 
     fclose(file);
 }

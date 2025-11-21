@@ -18,6 +18,8 @@
 #define ALPHA_LEN 27
 #define PATH_MAX_LEN 128
 
+#define MAX_ROTORS 4
+
 #define OUTPUT_FILE_DEFAULT "output.txt"
 
 // Application metadata
@@ -36,12 +38,10 @@
 #define REL_DATA_DIR "../bin"
 
 // Data file names
-#define BARRELS_FILE "barrels_BIN"
+#define ROTORS_FILE "rotors_BIN"
 #define MODIFIERS_FILE "modifiers_BIN"
 
 // Barrel step configuration
-#define STEPS_BARREL_A 2
-#define STEPS_BARREL_B 5
-#define STEPS_BARREL_C 7
+#define STEPS_ROTORS {2, 5, 7}
 
 #endif

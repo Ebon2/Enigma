@@ -53,7 +53,7 @@ void u_select_paths();
  * the values stay within a valid range. Finally, the updated modifiers are
  * exported to an external system or module.
  */
-void u_change_barrels();
+void u_change_rotors();
 
 void u_create_file(char name[]);
 #endif //ENIGMA_UTILS_H

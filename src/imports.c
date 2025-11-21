@@ -7,18 +7,18 @@
 
 #include <stdio.h>
 
-static int_comb_t s_barrels [4][ALPHA_LEN];
+static int_comb_t s_rotors [MAX_ROTORS][ALPHA_LEN];
 
 static void s_change_char();
 
-void import_barrels() {
-    FILE *file = fopen(g_path_barrels, "rb");
+void import_rotors() {
+    FILE *file = fopen(g_path_rotors, "rb");
     if (!file) {
-        perror("Error opening barrels file");
+        perror("Error opening rotors file");
         return;
     }
 
-    fread(s_barrels, sizeof(int_comb_t), ALPHA_LEN * 4, file);
+    fread(s_rotors, sizeof(int_comb_t), ALPHA_LEN * MAX_ROTORS, file);
 
     fclose(file);
 
@@ -32,15 +32,15 @@ void import_modifiers() {
         return;
     }
 
-    fread(g_barrels_modifier, sizeof(int), 4, file);
+    fread(g_rotors_modifier, sizeof(int), MAX_ROTORS-1, file);
 
     fclose(file);
 }
 
 static void s_change_char() {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < MAX_ROTORS; i++)
         for (int j = 0; j < ALPHA_LEN; j++) {
-            g_barrels[i][j].input = (char)s_barrels[i][j].input;
-            g_barrels[i][j].output = (char)s_barrels[i][j].output;
+            g_rotors[i][j].input = (char)s_rotors[i][j].input;
+            g_rotors[i][j].output = (char)s_rotors[i][j].output;
         }
 }

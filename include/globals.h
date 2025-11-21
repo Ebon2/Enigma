@@ -18,17 +18,11 @@
 
 #include <stdio.h>
 
-/**
- * @var g_barrel_a
- * @brief Array of comb_t structures representing the configuration of the first barrel.
- */
-extern comb_t g_barrels[4][ALPHA_LEN];
+extern comb_t g_rotors[MAX_ROTORS][ALPHA_LEN];
 
-/**
- * @var g_barrel_a_modifier
- * @brief Modifier for the first barrel's configuration.
- */
-extern int g_barrels_modifier[3];
+extern int g_rotors_modifier[MAX_ROTORS-1];
+
+extern int g_steps_rotors[MAX_ROTORS-1];
 
 /**
  * @var g_input_file_name
@@ -53,10 +47,10 @@ extern FILE *g_input_file;
 extern FILE *g_output_file;
 
 /**
- * @var g_path_barrels
- * @brief Path to the barrels configuration file.
+ * @var g_path_rotors
+ * @brief Path to the rotor's configuration file.
  */
-extern char g_path_barrels[PATH_MAX_LEN];
+extern char g_path_rotors[PATH_MAX_LEN];
 /**
  * @var g_path_modifier
  * @brief Path to the modifier configuration file.
@@ -76,7 +70,7 @@ extern level_t g_actual_level;
 
 /**
  * @var g_make_output_file
- * @brief Represents a flag of the make an output file
+ * @brief Represents a flag of make an output file
  */
 extern int g_make_output_file;
 extern int g_paragraph;

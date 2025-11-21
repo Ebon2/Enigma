@@ -43,7 +43,7 @@
  * - If the file cannot be opened, an error message is logged using `perror`, and the function
  *   returns without modifying any barrel or reflector data.
  */
-void import_barrels();
+void import_rotors();
 
 /**
  * @brief Loads modifier configuration values for the barrels from a binary file.

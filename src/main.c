@@ -31,7 +31,7 @@ int main(const int argc, char *argv[]) {
     u_process_args(argc, argv);
 
 
-    import_barrels();
+    import_rotors();
     import_modifiers();
 
     if (g_paragraph) {
@@ -43,7 +43,7 @@ int main(const int argc, char *argv[]) {
 
     u_process_file();
 
-    check_barrels();
+    check_rotors();
     if (g_mode == ENCRYPT)
         encrypt();
     else if (g_mode == DECRYPT)

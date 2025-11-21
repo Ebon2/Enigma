@@ -55,7 +55,7 @@ void decrypt();
  *
  * @return True if barrels are valid, false otherwise.
  */
-int check_barrels();
+int check_rotors();
 
 #endif
 //functions

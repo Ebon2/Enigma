@@ -45,7 +45,7 @@
  * - Proper error handling is implemented to address potential issues
  *   with file I/O operations.
  */
-void export_barrels();
+void export_rotors();
 
 /**
  * @brief Exports the barrel modifier values to a binary file.
