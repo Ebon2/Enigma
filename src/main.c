@@ -39,7 +39,6 @@ int main(const int argc, char *argv[]) {
             u_create_file(g_input_file_name);
         else
             u_create_file("input.txt");
-
     }
 
     u_process_file();
@@ -64,11 +63,12 @@ int main(const int argc, char *argv[]) {
             remove(g_output_file_name);
     }
 
-
-    if (!g_input_file_name)
-        remove("input.txt");
-    else
-        remove(g_input_file_name);
+    if (g_paragraph) {
+        if (!g_input_file_name)
+            remove("input.txt");
+        else
+            remove(g_input_file_name);
+    }
 
     return 0;
 }

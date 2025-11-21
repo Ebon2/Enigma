@@ -22,38 +22,13 @@
  * @var g_barrel_a
  * @brief Array of comb_t structures representing the configuration of the first barrel.
  */
-extern comb_t g_barrel_a[ALPHA_LEN];
-/**
- * @var g_barrel_b
- * @brief Array of comb_t structures representing the configuration of the second barrel.
- */
-extern comb_t g_barrel_b[ALPHA_LEN];
-/**
- * @var g_barrel_c
- * @brief Array of comb_t structures representing the configuration of the third barrel.
- */
-extern comb_t g_barrel_c[ALPHA_LEN];
-/**
- * @var g_reflector
- * @brief Array of comb_t structures representing the configuration of the reflector.
- */
-extern comb_t g_reflector[ALPHA_LEN];
+extern comb_t g_barrels[4][ALPHA_LEN];
 
 /**
  * @var g_barrel_a_modifier
  * @brief Modifier for the first barrel's configuration.
  */
-extern int g_barrel_a_modifier;
-/**
- * @var g_barrel_b_modifier
- * @brief Modifier for the second barrel's configuration.
- */
-extern int g_barrel_b_modifier;
-/**
- * @var g_barrel_c_modifier
- * @brief Modifier for the third barrel's configuration.
- */
-extern int g_barrel_c_modifier;
+extern int g_barrels_modifier[3];
 
 /**
  * @var g_input_file_name
@@ -99,6 +74,10 @@ extern mod_t g_mode;
  */
 extern level_t g_actual_level;
 
+/**
+ * @var g_make_output_file
+ * @brief Represents a flag of the make an output file
+ */
 extern int g_make_output_file;
 extern int g_paragraph;
 

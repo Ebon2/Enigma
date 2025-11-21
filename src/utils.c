@@ -72,18 +72,13 @@ void u_create_file(char name[]) {
 }
 
 void u_change_barrels() {
-    g_barrel_a_modifier += STEPS_BARREL_A;
-    g_barrel_b_modifier += STEPS_BARREL_B;
-    g_barrel_c_modifier += STEPS_BARREL_C;
+    g_barrels_modifier[0] += STEPS_BARREL_A;
+    g_barrels_modifier[1] += STEPS_BARREL_B;
+    g_barrels_modifier[2] += STEPS_BARREL_C;
 
-    if (g_barrel_a_modifier >= ALPHA_LEN)
-        g_barrel_a_modifier -= ALPHA_LEN-1;
-
-    if (g_barrel_b_modifier >= ALPHA_LEN)
-        g_barrel_b_modifier -= ALPHA_LEN-1;
-
-    if (g_barrel_c_modifier >= ALPHA_LEN)
-        g_barrel_c_modifier -= ALPHA_LEN-1;
+    for (int i=0; i<3; i++)
+        if (g_barrels_modifier[i] >= ALPHA_LEN)
+            g_barrels_modifier[i] -= ALPHA_LEN-1;
 
     export_modifiers();
 }

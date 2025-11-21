@@ -14,10 +14,8 @@ void export_barrels() {
         return;
     }
 
-    fwrite(g_barrel_a, sizeof(comb_t), ALPHA_LEN, file);
-    fwrite(g_barrel_b, sizeof(comb_t), ALPHA_LEN, file);
-    fwrite(g_barrel_c, sizeof(comb_t), ALPHA_LEN, file);
-    fwrite(g_reflector, sizeof(comb_t), ALPHA_LEN, file);
+    for (int i = 0; i < 4; i++)
+        fwrite(g_barrels[i], sizeof(comb_t), ALPHA_LEN, file);
 
     fclose(file);
 }
@@ -28,10 +26,7 @@ void export_modifiers() {
         perror("Error opening modifiers file for writing");
         return;
     }
-
-    fwrite(&g_barrel_a_modifier, sizeof(int), 1, file);
-    fwrite(&g_barrel_b_modifier, sizeof(int), 1, file);
-    fwrite(&g_barrel_c_modifier, sizeof(int), 1, file);
+    fwrite(g_barrels_modifier, sizeof(int), 4, file);
 
     fclose(file);
 }

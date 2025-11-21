@@ -7,14 +7,9 @@
 
 #include <stdio.h>
 
-comb_t g_barrel_a[ALPHA_LEN];
-comb_t g_barrel_b[ALPHA_LEN];
-comb_t g_barrel_c[ALPHA_LEN];
-comb_t g_reflector[ALPHA_LEN];
+comb_t g_barrels[4][ALPHA_LEN];
 
-int g_barrel_a_modifier = 0;
-int g_barrel_b_modifier = 0;
-int g_barrel_c_modifier = 0;
+int g_barrels_modifier[3] = {0, 0, 0};
 
 char *g_input_file_name = NULL;
 char *g_output_file_name = OUTPUT_FILE_DEFAULT;
