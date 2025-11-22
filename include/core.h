@@ -48,14 +48,14 @@ void encrypt();
 void decrypt();
 
 /**
- * @brief Checks the status of barrels and returns the result.
+ * @brief Checks the status of rotors and returns the result.
  *
- * This function verifies the state of barrels and returns a boolean value indicating
- * whether the barrels are in a valid configuration for encryption/decryption.
+ * This function verifies the state of rotors and returns a boolean value indicating
+ * whether the rotors are in a valid configuration for encryption/decryption.
  *
- * @return True if barrels are valid, false otherwise.
+ * @return True if rotors are valid, false otherwise.
  */
-int check_barrels();
+int check_rotors();
 
 #endif
 //functions

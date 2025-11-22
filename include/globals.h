@@ -19,41 +19,22 @@
 #include <stdio.h>
 
 /**
- * @var g_barrel_a
- * @brief Array of comb_t structures representing the configuration of the first barrel.
+ * @var g_rotors
+ * @brief Represents the configuration of rotors used for encoding and decoding operations.
  */
-extern comb_t g_barrel_a[ALPHA_LEN];
-/**
- * @var g_barrel_b
- * @brief Array of comb_t structures representing the configuration of the second barrel.
- */
-extern comb_t g_barrel_b[ALPHA_LEN];
-/**
- * @var g_barrel_c
- * @brief Array of comb_t structures representing the configuration of the third barrel.
- */
-extern comb_t g_barrel_c[ALPHA_LEN];
-/**
- * @var g_reflector
- * @brief Array of comb_t structures representing the configuration of the reflector.
- */
-extern comb_t g_reflector[ALPHA_LEN];
+extern comb_t g_rotors[MAX_ROTORS][ALPHA_LEN];
 
 /**
- * @var g_barrel_a_modifier
- * @brief Modifier for the first barrel's configuration.
+ * @var g_rotors_modifier
+ * @brief Represents the modifiers of rotors used for encoding and decoding operations.
  */
-extern int g_barrel_a_modifier;
+extern int g_rotors_modifier[MAX_ROTORS-1];
+
 /**
- * @var g_barrel_b_modifier
- * @brief Modifier for the second barrel's configuration.
+ * @var g_steps_rotors
+ * @brief Represents the steps of rotors used for encoding and decoding operations.
  */
-extern int g_barrel_b_modifier;
-/**
- * @var g_barrel_c_modifier
- * @brief Modifier for the third barrel's configuration.
- */
-extern int g_barrel_c_modifier;
+extern int g_steps_rotors[MAX_ROTORS-1];
 
 /**
  * @var g_input_file_name
@@ -78,10 +59,10 @@ extern FILE *g_input_file;
 extern FILE *g_output_file;
 
 /**
- * @var g_path_barrels
- * @brief Path to the barrels configuration file.
+ * @var g_path_rotors
+ * @brief Path to the rotor's configuration file.
  */
-extern char g_path_barrels[PATH_MAX_LEN];
+extern char g_path_rotors[PATH_MAX_LEN];
 /**
  * @var g_path_modifier
  * @brief Path to the modifier configuration file.
@@ -93,14 +74,28 @@ extern char g_path_modifier[PATH_MAX_LEN];
  * @brief Mode of operation for the Enigma machine.
  */
 extern mod_t g_mode;
+
 /**
  * @var g_actual_level
  * @brief Represents the current encryption or decryption level being used.
  */
 extern level_t g_actual_level;
 
+/**
+ * @var g_make_output_file
+ * @brief Represents a flag of make an output file
+ */
 extern int g_make_output_file;
+
+/**
+ * @var g_paragraph
+ * @brief the flag of paragraph mode
+ */
 extern int g_paragraph;
 
+/**
+ * @var g_input_paragraph
+ * @brief the paragraph buffer
+ */
 extern char g_input_paragraph[MAX_CHAR];
 #endif //ENIGMA_GLOBALS_H

@@ -31,7 +31,7 @@ int main(const int argc, char *argv[]) {
     u_process_args(argc, argv);
 
 
-    import_barrels();
+    import_rotors();
     import_modifiers();
 
     if (g_paragraph) {
@@ -39,12 +39,11 @@ int main(const int argc, char *argv[]) {
             u_create_file(g_input_file_name);
         else
             u_create_file("input.txt");
-
     }
 
     u_process_file();
 
-    check_barrels();
+    check_rotors();
     if (g_mode == ENCRYPT)
         encrypt();
     else if (g_mode == DECRYPT)
@@ -64,11 +63,12 @@ int main(const int argc, char *argv[]) {
             remove(g_output_file_name);
     }
 
-
-    if (!g_input_file_name)
-        remove("input.txt");
-    else
-        remove(g_input_file_name);
+    if (g_paragraph) {
+        if (!g_input_file_name)
+            remove("input.txt");
+        else
+            remove(g_input_file_name);
+    }
 
     return 0;
 }

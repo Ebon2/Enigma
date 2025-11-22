@@ -36,7 +36,7 @@ set(ENIGMA_USER_DATA_DIR "$ENV{HOME}/.local/share/enigma")
 install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E make_directory \"${ENIGMA_USER_DATA_DIR}\")")
 
 install(FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/bin/barrels_BIN
+        ${CMAKE_CURRENT_SOURCE_DIR}/bin/rotors_BIN
         ${CMAKE_CURRENT_SOURCE_DIR}/bin/modifiers_BIN
         DESTINATION ${ENIGMA_USER_DATA_DIR}
         PERMISSIONS

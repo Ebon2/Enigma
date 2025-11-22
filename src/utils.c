@@ -5,6 +5,7 @@
 #include "../include/utils.h"
 #include "../include/globals.h"
 #include "../include/export.h"
+#include "../include/defines.h"
 
 #include <getopt.h>
 #include <stdio.h>
@@ -14,7 +15,7 @@
 static int s_is_valid_level(int level);
 static void s_init_globals(int opt);
 static void s_modifiers_path();
-static void s_barrels_path();
+static void s_rotors_path();
 static void s_help();
 static void s_version();
 static level_t s_get_level(int level);
@@ -55,7 +56,7 @@ void u_process_file() {
 
 void u_select_paths() {
     s_modifiers_path();
-    s_barrels_path();
+    s_rotors_path();
 
 }
 
@@ -71,19 +72,13 @@ void u_create_file(char name[]) {
 
 }
 
-void u_change_barrels() {
-    g_barrel_a_modifier += STEPS_BARREL_A;
-    g_barrel_b_modifier += STEPS_BARREL_B;
-    g_barrel_c_modifier += STEPS_BARREL_C;
+void u_change_rotors() {
+    for (int i=0; i<MAX_ROTORS-1; i++)
+        g_rotors_modifier[i] += g_steps_rotors[i];
 
-    if (g_barrel_a_modifier >= ALPHA_LEN)
-        g_barrel_a_modifier -= ALPHA_LEN-1;
-
-    if (g_barrel_b_modifier >= ALPHA_LEN)
-        g_barrel_b_modifier -= ALPHA_LEN-1;
-
-    if (g_barrel_c_modifier >= ALPHA_LEN)
-        g_barrel_c_modifier -= ALPHA_LEN-1;
+    for (int i=0; i<MAX_ROTORS-1; i++)
+        if (g_rotors_modifier[i] >= ALPHA_LEN)
+            g_rotors_modifier[i] -= ALPHA_LEN-1;
 
     export_modifiers();
 }
@@ -129,7 +124,7 @@ static void s_init_globals(const int opt) {
 }
 
 static void s_modifiers_path() {
-    char candidate[256];
+    char candidate[PATH_MAX_LEN];
 
     // 1) Try a relative path (development tree)
     snprintf(candidate, sizeof(candidate), "%s/%s", REL_DATA_DIR, MODIFIERS_FILE);
@@ -161,36 +156,36 @@ static void s_modifiers_path() {
     }
 }
 
-static void s_barrels_path() {
-    char candidate[256];
+static void s_rotors_path() {
+    char candidate[PATH_MAX_LEN];
 
     // 1) Try a relative path (development tree)
-    snprintf(candidate, sizeof(candidate), "%s/%s", REL_DATA_DIR, BARRELS_FILE);
+    snprintf(candidate, sizeof(candidate), "%s/%s", REL_DATA_DIR, ROTORS_FILE);
     FILE *f = fopen(candidate, "rb");
     if (f != NULL) {
         fclose(f);
-        snprintf(g_path_barrels, sizeof(g_path_barrels), "%s", candidate);
+        snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", candidate);
         return;
     }
 
     // 2) Try per-user data dir: $HOME + USER_DATA_DIR_SUFFIX
     const char *home = getenv("HOME");
     if (home && *home) {
-        snprintf(candidate, sizeof(candidate), "%s%s/%s", home, USER_DATA_DIR_SUFFIX, BARRELS_FILE);
+        snprintf(candidate, sizeof(candidate), "%s%s/%s", home, USER_DATA_DIR_SUFFIX, ROTORS_FILE);
         f = fopen(candidate, "rb");
         if (f != NULL) {
             fclose(f);
-            snprintf(g_path_barrels, sizeof(g_path_barrels), "%s", candidate);
+            snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", candidate);
             return;
         }
     }
 
     // 3) Fallback to system-wide data dir
-    snprintf(candidate, sizeof(candidate), "%s/%s", SYSTEM_DATA_DIR, BARRELS_FILE);
+    snprintf(candidate, sizeof(candidate), "%s/%s", SYSTEM_DATA_DIR, ROTORS_FILE);
     f = fopen(candidate, "rb");
     if (f != NULL) {
         fclose(f);
-        snprintf(g_path_barrels, sizeof(g_path_barrels), "%s", candidate);
+        snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", candidate);
     }
 }
 
@@ -209,9 +204,9 @@ static void s_help() {
     printf("      --no-output-file    No save output file\n\n");
 
     printf("Data search order for barrels/modifiers files:\n");
-    printf("  1) Relative: %s/{%s,%s}\n", REL_DATA_DIR, BARRELS_FILE, MODIFIERS_FILE);
-    printf("  2) User: $HOME%s/{%s,%s}\n", USER_DATA_DIR_SUFFIX, BARRELS_FILE, MODIFIERS_FILE);
-    printf("  3) System: %s/{%s,%s}\n\n", SYSTEM_DATA_DIR, BARRELS_FILE, MODIFIERS_FILE);
+    printf("  1) Relative: %s/{%s,%s}\n", REL_DATA_DIR, ROTORS_FILE, MODIFIERS_FILE);
+    printf("  2) User: $HOME%s/{%s,%s}\n", USER_DATA_DIR_SUFFIX, ROTORS_FILE, MODIFIERS_FILE);
+    printf("  3) System: %s/{%s,%s}\n\n", SYSTEM_DATA_DIR, ROTORS_FILE, MODIFIERS_FILE);
 
     printf("Examples:\n");
     printf("  %s -f input.txt -o out.txt -l 2\n", APP_NAME);
