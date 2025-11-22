@@ -38,17 +38,17 @@ void u_process_args(int argc, char *argv[]);
 void u_process_file();
 
 /**
- * @brief Initializes and selects required paths for modifiers and barrels.
+ * @brief Initializes and selects required paths for modifiers and rotors.
  * This function calls internal utility functions to set up
- * paths necessary for further processing.
+ * the paths necessary for further processing.
  */
 void u_select_paths();
 
 /**
- * @brief Regenerates the barrels configuration.
- * Adjusts the modifiers for the rotating barrels used in encryption or
- * computation processes. The function increments the values of the barrel
- * modifiers by predefined step sizes specific to each barrel. If a modifier
+ * @brief Regenerates the rotors' configuration.
+ * Adjusts the modifiers for the rotating rotors used in encryption or
+ * computation processes. The function increments the values of the rotor
+ * modifiers by predefined step sizes specific to each rotor. If a modifier
  * exceeds the maximum allowable value (ALPHA_LEN), it wraps around to ensure
  * the values stay within a valid range. Finally, the updated modifiers are
  * exported to an external system or module.

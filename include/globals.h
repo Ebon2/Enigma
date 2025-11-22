@@ -18,10 +18,22 @@
 
 #include <stdio.h>
 
+/**
+ * @var g_rotors
+ * @brief Represents the configuration of rotors used for encoding and decoding operations.
+ */
 extern comb_t g_rotors[MAX_ROTORS][ALPHA_LEN];
 
+/**
+ * @var g_rotors_modifier
+ * @brief Represents the modifiers of rotors used for encoding and decoding operations.
+ */
 extern int g_rotors_modifier[MAX_ROTORS-1];
 
+/**
+ * @var g_steps_rotors
+ * @brief Represents the steps of rotors used for encoding and decoding operations.
+ */
 extern int g_steps_rotors[MAX_ROTORS-1];
 
 /**
@@ -62,6 +74,7 @@ extern char g_path_modifier[PATH_MAX_LEN];
  * @brief Mode of operation for the Enigma machine.
  */
 extern mod_t g_mode;
+
 /**
  * @var g_actual_level
  * @brief Represents the current encryption or decryption level being used.
@@ -73,7 +86,16 @@ extern level_t g_actual_level;
  * @brief Represents a flag of make an output file
  */
 extern int g_make_output_file;
+
+/**
+ * @var g_paragraph
+ * @brief the flag of paragraph mode
+ */
 extern int g_paragraph;
 
+/**
+ * @var g_input_paragraph
+ * @brief the paragraph buffer
+ */
 extern char g_input_paragraph[MAX_CHAR];
 #endif //ENIGMA_GLOBALS_H
