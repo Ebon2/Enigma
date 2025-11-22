@@ -2,16 +2,30 @@
 // Created by angelrojas on 06/11/25.
 //
 
-#include "../include/imports.h"
+#include "../include/barrels.h"
 #include "../include/globals.h"
 
 #include <stdio.h>
 
-static int_comb_t s_rotors [MAX_ROTORS][ALPHA_LEN];
-
 static void s_change_char();
 
-void import_rotors() {
+void rotors_export() {
+    FILE *file = fopen(g_path_rotors, "wb");
+    if (!file) {
+        perror("Error opening rotors file for writing");
+        return;
+    }
+
+    for (int i = 0; i < MAX_ROTORS; i++)
+        fwrite(g_rotors[i], sizeof(comb_t), ALPHA_LEN, file);
+
+    fclose(file);
+}
+
+static int_comb_t s_rotors [MAX_ROTORS][ALPHA_LEN];
+
+
+void rotors_import() {
     FILE *file = fopen(g_path_rotors, "rb");
     if (!file) {
         perror("Error opening rotors file");
@@ -25,16 +39,12 @@ void import_rotors() {
     s_change_char();
 }
 
-void import_modifiers() {
-    FILE *file = fopen(g_path_modifier, "rb");
-    if (!file) {
-        perror("Error opening modifiers file");
-        return;
-    }
+int rotors_check(){
+    for (int i=0; i<MAX_ROTORS-1; i++)
+        if (g_rotors_modifier[i]>ALPHA_LEN-1  || g_rotors_modifier[i]<1)
+            return 0;
 
-    fread(g_rotors_modifier, sizeof(int), MAX_ROTORS-1, file);
-
-    fclose(file);
+    return 1;
 }
 
 static void s_change_char() {
