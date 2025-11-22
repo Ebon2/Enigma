@@ -1,92 +1,96 @@
-# ENIGMA-LIKE ENCRYPTION PROGRAM
+# Enigma-like Encryption Program
 
-A C PROGRAM THAT IMPLEMENTS AN ENIGMA-STYLE ENCRYPTION SYSTEM USING MULTIPLE BARREL ROTORS FOR TEXT ENCRYPTION AND
-DECRYPTION.
+A C program that implements an Enigma-style encryption system using multiple barrel rotors for text encryption and
+decryption.
 
-## DESCRIPTION
+## Description
 
-THIS PROGRAM IMPLEMENTS A TEXT ENCRYPTION SYSTEM INSPIRED BY THE ENIGMA MACHINE, USING THREE CONFIGURABLE BARRELS (ROTORS) AND A REFLECTOR. IT PROCESSES INPUT TEXT THROUGH MULTIPLE ENCRYPTION STAGES TO PRODUCE A SECURE ENCRYPTED
-OUTPUT.
+This program implements a text encryption system inspired by the Enigma machine, using three configurable barrels 
+(rotors) and a reflector. It processes input text through multiple encryption stages to produce a secure encrypted
+output.
 
-## INSTALLATION
+## Installation
 
-USING CMAKE (RECOMMENDED):
+Using CMake (recommended):
 
-1. CONFIGURE AND BUILD
-   ```BASH
-   CMAKE -S . -B BUILD
-   CMAKE --BUILD BUILD
+1. Configure and build
+   ```bash
+   cmake -S . -B build
+   cmake --build build
    ```
-2. INSTALL
-   ```BASH
-   SUDO CMAKE --INSTALL BUILD
+2. Install
+   ```bash
+   sudo cmake --install build
    ```
-   - THE EXECUTABLE WILL BE INSTALLED TO: /USR/LOCAL/BIN/ENIGMA (DEFAULT PREFIX)
-   - THE DATA FILES FROM ./BIN (BARRELS_BIN, MODIFIERS_BIN) WILL BE INSTALLED TO: ~/.LOCAL/SHARE/ENIGMA
+   - The executable will be installed to: /usr/local/bin/enigma (default prefix)
+   - The data files from ./bin (barrels_BIN, modifiers_BIN) will be installed to: ~/.local/share/enigma
 
-NOTES:
-- IF YOU PREFER A DIFFERENT SYSTEM PREFIX, SET IT WHEN CONFIGURING, FOR EXAMPLE:
-  ```BASH
-  CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=/USR/LOCAL
+Notes:
+- If you prefer a different system prefix, set it when configuring, for example:
+  ```bash
+  cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/usr/local
   ```
-- YOU CAN ALSO INSTALL WITHOUT SUDO BY CHOOSING A WRITABLE PREFIX (E.G., YOUR HOME):
-  ```BASH
-  CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX="$HOME/.LOCAL"
-  CMAKE --BUILD BUILD
-  CMAKE --INSTALL BUILD
-  # ENSURE ~/.LOCAL/BIN IS IN YOUR PATH
+- You can also install without sudo by choosing a writable prefix (e.g., your home):
+  ```bash
+  cmake -S . -B build -DCMAKE_INSTALL_PREFIX="$HOME/.local"
+  cmake --build build
+  cmake --install build
+  # Ensure ~/.local/bin is in your PATH
   ```
 
-## USAGE
+## Usage
 
-COMMAND-LINE OPTIONS:
+Command-line options:
 
 ```
- ENIGMA [OPTIONS]
+ enigma [options]
 
- OPTIONS:
-   -H, --HELP           SHOW THIS HELP AND EXIT
-   -V, --VERSION        SHOW VERSION INFORMATION AND EXIT
-   -F, --FILE <PATH>    INPUT FILE TO PROCESS (REQUIRED)
-   -O, --OUTPUT <PATH>  OUTPUT FILE PATH (DEFAULT: OUTPUT.TXT)
-   -L, --LEVEL <N>      SECURITY LEVEL: 1=LOW, 2=HIGH, 3=EXTREME
-   -D, --DECRYPT        DECRYPT MODE (DEFAULT IS ENCRYPT)
+ Options:
+   -h, --help              Show this help and exit
+   -v, --version           Show version information and exit
+   -f, --file <path>       Input file to process (required)
+   -o, --output <path>     Output file path (default: output.txt)
+   -l, --level <n>         Security level: 1=LOW, 2=HIGH, 3=EXTREME
+   -d, --decrypt           Decrypt mode (default is encrypt)
+   -p, --paragraph <text>  Use the terminal input to encrypt or decrypt
+       --no-output-file    No save output file
 ```
 
-EXAMPLES:
-- ENCRYPT WITH LEVEL 2:
-  ```BASH
-  ENIGMA -F INPUT.TXT -O OUT.TXT -L 2
+Examples:
+- Encrypt with level 2:
+  ```bash
+  enigma -f input.txt -o out.txt -l 2
   ```
-- DECRYPT:
-  ```BASH
-  ENIGMA --DECRYPT --FILE CIPHER.TXT --OUTPUT PLAIN.TXT
+- Decrypt:
+  ```bash
+  enigma --decrypt --file cipher.txt --output plain.txt
   ```
 
-DATA FILES SEARCH ORDER FOR BARRELS/MODIFIERS:
-1) RELATIVE: ../BIN/{BARRELS_BIN, MODIFIERS_BIN}
-2) USER: $HOME/.LOCAL/SHARE/ENIGMA/{BARRELS_BIN, MODIFIERS_BIN}
-3) SYSTEM: /USR/LOCAL/SHARE/ENIGMA/{BARRELS_BIN, MODIFIERS_BIN}
+Data files search order for barrels/modifiers:
+1) Relative: ../bin/{barrels_BIN, modifiers_BIN}
+2) User: $HOME/.local/share/enigma/{barrels_BIN, modifiers_BIN}
+3) System: /usr/local/share/enigma/{barrels_BIN, modifiers_BIN}
 
-NOTES BELOW DESCRIBE THE ALGORITHMIC BEHAVIOR. THE ENCRYPTED OUTPUT WILL INCLUDE THREE CHARACTERS AT THE END REPRESENTING THE BARREL POSITIONS USED FOR ENCRYPTION.
+Notes below describe the algorithmic behavior. The encrypted output will include three characters at the end
+representing the barrel positions used for encryption.
 
-## CONFIGURATION
+## Configuration
 
-THE BARREL SETTINGS CAN BE CONFIGURED IN THE DEFINES.H FILE:
+The barrel settings can be configured in the defines.h file:
 
-- BARREL_A: FIRST ROTOR POSITION (1–26)
-- BARREL_B: SECOND ROTOR POSITION (1–26)
-- BARREL_C: THIRD ROTOR POSITION (1–26)
+- BARREL_A: First rotor position (1–26)
+- BARREL_B: Second rotor position (1–26)
+- BARREL_C: Third rotor position (1–26)
 
-ALL BARREL VALUES MUST BE BETWEEN 1 AND 26 TO REPRESENT VALID LETTER SHIFTS.
+All barrel values must be between 1 and 26 to represent valid letter shifts.
 
-## HOW IT WORKS
+## How It Works
 
-1. INPUT TEXT IS CONVERTED TO UPPERCASE
-2. EACH CHARACTER PASSES THROUGH:
-    - BARREL A ENCRYPTION AND ROTATION
-    - BARREL B ENCRYPTION AND ROTATION
-    - BARREL C ENCRYPTION AND ROTATION
-    - REFLECTOR
-    - REVERSE PATH THROUGH ALL BARRELS
-3. THE FINAL OUTPUT INCLUDES THE BARREL POSITIONS AS VALIDATION KEYS
+1. Input text is converted to uppercase
+2. Each character passes through:
+    - Barrel A encryption and rotation
+    - Barrel B encryption and rotation
+    - Barrel C encryption and rotation
+    - Reflector
+    - Reverse path through all barrels
+3. The final output includes the barrel positions as validation keys
