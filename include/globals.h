@@ -31,12 +31,6 @@ extern comb_t g_rotors[MAX_ROTORS][ALPHA_LEN];
 extern int g_rotors_modifier[MAX_ROTORS-1];
 
 /**
- * @var g_steps_rotors
- * @brief Represents the steps of rotors used for encoding and decoding operations.
- */
-extern int g_steps_rotors[MAX_ROTORS-1];
-
-/**
  * @var g_input_file_name
  * @brief Name of the input file for encryption or decryption.
  */
@@ -63,11 +57,6 @@ extern FILE *g_output_file;
  * @brief Path to the rotor's configuration file.
  */
 extern char g_path_rotors[PATH_MAX_LEN];
-/**
- * @var g_path_modifier
- * @brief Path to the modifier configuration file.
- */
-extern char g_path_modifier[PATH_MAX_LEN];
 
 /**
  * @var g_mode

@@ -2,12 +2,12 @@
 // Created by angelrojas on 06/11/25.
 //
 
-#include "../include/barrels.h"
+#include "../include/rotors.h"
 #include "../include/globals.h"
 
 #include <stdio.h>
 
-static void s_change_char();
+static void s_change_char(); /**< Change the character representation of rotors */
 
 void rotors_export() {
     FILE *file = fopen(g_path_rotors, "wb");

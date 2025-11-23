@@ -12,10 +12,9 @@
 
 #include "../include/core.h"
 #include "../include/globals.h"
-#include "../include/imports.h"
 #include "../include/structures.h"
 #include "../include/utils.h"
-
+#include "../include/rotors.h"
 
 /**
  * The entry point of the program. This function initializes necessary resources,
@@ -27,23 +26,10 @@
  * @return Returns 0 if the program executes successfully.
  */
 int main(const int argc, char *argv[]) {
-    u_select_paths();
-    u_process_args(argc, argv);
+    u_init_program(argc, argv);
 
+    rotors_check();
 
-    import_rotors();
-    import_modifiers();
-
-    if (g_paragraph) {
-        if (g_input_file_name)
-            u_create_file(g_input_file_name);
-        else
-            u_create_file("input.txt");
-    }
-
-    u_process_file();
-
-    check_rotors();
     if (g_mode == ENCRYPT)
         encrypt();
     else if (g_mode == DECRYPT)
