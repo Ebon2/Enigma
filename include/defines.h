@@ -39,9 +39,5 @@
 
 // Data file names
 #define ROTORS_FILE "rotors_BIN"
-#define MODIFIERS_FILE "modifiers_BIN"
-
-// Barrel step configuration
-#define STEPS_ROTORS {2, 5, 7}
 
 #endif

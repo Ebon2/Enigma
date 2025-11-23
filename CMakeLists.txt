@@ -11,17 +11,22 @@ set(PROJECT_VERSION 1.1)
 set(ENIGMA_SOURCES
         src/main.c
         src/core.c
-        src/export.c
+        src/rotors.c
         src/globals.c
-        src/imports.c
         src/utils.c
 )
 
 # Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+#find the OpenSSL library
+find_package(OpenSSL REQUIRED)
+
 # Executable
 add_executable(enigma ${ENIGMA_SOURCES})
+
+# Include the libraries, equivalent to -lcrypto in gcc
+target_link_libraries(enigma PRIVATE OpenSSL::Crypto)
 
 # Install the executable to /usr/local/bin (default prefix is /usr/local)
 install(TARGETS enigma
@@ -37,7 +42,6 @@ install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E make_directory \"$
 
 install(FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/bin/rotors_BIN
-        ${CMAKE_CURRENT_SOURCE_DIR}/bin/modifiers_BIN
         DESTINATION ${ENIGMA_USER_DATA_DIR}
         PERMISSIONS
         OWNER_READ OWNER_WRITE

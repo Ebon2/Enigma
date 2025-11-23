@@ -4,21 +4,28 @@
 
 #include "../include/utils.h"
 #include "../include/globals.h"
-#include "../include/export.h"
 #include "../include/defines.h"
+#include "../include/rotors.h"
 
+#include <openssl/rand.h>
 #include <getopt.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-static int s_is_valid_level(int level);
-static void s_init_globals(int opt);
-static void s_modifiers_path();
-static void s_rotors_path();
-static void s_help();
-static void s_version();
-static level_t s_get_level(int level);
+static int s_try_open_file(const char *path); /**< Try to open a file and return 1 if successful, 0 otherwise */
+static int s_is_valid_level(int level); /**< Validate the security level input */
+static int s_get_random_int(); /**< Generate a random integer */
+
+static void s_process_args(int argc, char *argv[]); /**< Process command-line arguments */
+static void s_init_globals(int opt); /**< Initialize global variables */
+static void s_process_file(); /**< Process the input file */
+static void s_rotors_path(); /**< Initialize rotors path */
+static void s_version(); /**< Display program version */
+static void s_help(); /**< Display program help */
+
+static level_t s_get_level(int level); /**< Validate the security level input */
 
 static struct option long_options[] = {
     {"help", no_argument, NULL, 'h'},
@@ -31,16 +38,32 @@ static struct option long_options[] = {
     {"no-output-file", no_argument, &g_make_output_file, 0},
 };
 
-void u_process_args(const int argc, char *argv[]) {
+void u_init_program(const int argc, char *argv[]) {
+    s_rotors_path();
+    s_process_args(argc, argv);
+    rotors_import();
+    u_change_rotors();
+
+    if (g_paragraph) {
+        if (g_input_file_name)
+            u_create_file(g_input_file_name);
+        else
+            u_create_file("input.txt");
+    }
+
+    s_process_file();
+}
+
+void s_process_args(const int argc, char *argv[]) {
 
     int option_index = 0;
     int opt;
 
-    while (opt = getopt_long(argc, argv, "hvf:o:l:p:d", long_options, &option_index), opt != -1)
+    while ((opt = getopt_long(argc, argv, "hvf:o:l:p:d", long_options, &option_index)) != -1)
         s_init_globals(opt);
 }
 
-void u_process_file() {
+void s_process_file() {
     g_input_file = fopen(g_input_file_name, "r");
     g_output_file = fopen(g_output_file_name, "w+");
 
@@ -54,10 +77,9 @@ void u_process_file() {
     }
 }
 
-void u_select_paths() {
-    s_modifiers_path();
-    s_rotors_path();
-
+void u_change_rotors() {
+    for (int i=0; i<MAX_ROTORS-1; i++)
+        g_rotors_modifier[i] = s_get_random_int();
 }
 
 void u_create_file(char name[]) {
@@ -69,18 +91,6 @@ void u_create_file(char name[]) {
         fputs(g_input_paragraph, file);
         fclose(file);
     }
-
-}
-
-void u_change_rotors() {
-    for (int i=0; i<MAX_ROTORS-1; i++)
-        g_rotors_modifier[i] += g_steps_rotors[i];
-
-    for (int i=0; i<MAX_ROTORS-1; i++)
-        if (g_rotors_modifier[i] >= ALPHA_LEN)
-            g_rotors_modifier[i] -= ALPHA_LEN-1;
-
-    export_modifiers();
 }
 
 static int s_is_valid_level(const int level) {
@@ -123,70 +133,22 @@ static void s_init_globals(const int opt) {
     }
 }
 
-static void s_modifiers_path() {
-    char candidate[PATH_MAX_LEN];
-
-    // 1) Try a relative path (development tree)
-    snprintf(candidate, sizeof(candidate), "%s/%s", REL_DATA_DIR, MODIFIERS_FILE);
-    FILE *f = fopen(candidate, "rb");
-    if (f != NULL) {
-        fclose(f);
-        snprintf(g_path_modifier, sizeof(g_path_modifier), "%s", candidate);
-        return;
-    }
-
-    // 2) Try per-user data dir: $HOME + USER_DATA_DIR_SUFFIX
-    const char *home = getenv("HOME");
-    if (home && *home) {
-        snprintf(candidate, sizeof(candidate), "%s%s/%s", home, USER_DATA_DIR_SUFFIX, MODIFIERS_FILE);
-        f = fopen(candidate, "rb");
-        if (f != NULL) {
-            fclose(f);
-            snprintf(g_path_modifier, sizeof(g_path_modifier), "%s", candidate);
-            return;
-        }
-    }
-
-    // 3) Fallback to system-wide data dir
-    snprintf(candidate, sizeof(candidate), "%s/%s", SYSTEM_DATA_DIR, MODIFIERS_FILE);
-    f = fopen(candidate, "rb");
-    if (f != NULL) {
-        fclose(f);
-        snprintf(g_path_modifier, sizeof(g_path_modifier), "%s", candidate);
-    }
-}
-
 static void s_rotors_path() {
     char candidate[PATH_MAX_LEN];
 
     // 1) Try a relative path (development tree)
     snprintf(candidate, sizeof(candidate), "%s/%s", REL_DATA_DIR, ROTORS_FILE);
-    FILE *f = fopen(candidate, "rb");
-    if (f != NULL) {
-        fclose(f);
-        snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", candidate);
-        return;
-    }
+    if(s_try_open_file(candidate)) return;
 
     // 2) Try per-user data dir: $HOME + USER_DATA_DIR_SUFFIX
     const char *home = getenv("HOME");
     if (home && *home) {
         snprintf(candidate, sizeof(candidate), "%s%s/%s", home, USER_DATA_DIR_SUFFIX, ROTORS_FILE);
-        f = fopen(candidate, "rb");
-        if (f != NULL) {
-            fclose(f);
-            snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", candidate);
-            return;
-        }
+        if(s_try_open_file(candidate)) return;
     }
 
-    // 3) Fallback to system-wide data dir
     snprintf(candidate, sizeof(candidate), "%s/%s", SYSTEM_DATA_DIR, ROTORS_FILE);
-    f = fopen(candidate, "rb");
-    if (f != NULL) {
-        fclose(f);
-        snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", candidate);
-    }
+    s_try_open_file(candidate);
 }
 
 static void s_help() {
@@ -204,9 +166,9 @@ static void s_help() {
     printf("      --no-output-file    No save output file\n\n");
 
     printf("Data search order for barrels/modifiers files:\n");
-    printf("  1) Relative: %s/{%s,%s}\n", REL_DATA_DIR, ROTORS_FILE, MODIFIERS_FILE);
-    printf("  2) User: $HOME%s/{%s,%s}\n", USER_DATA_DIR_SUFFIX, ROTORS_FILE, MODIFIERS_FILE);
-    printf("  3) System: %s/{%s,%s}\n\n", SYSTEM_DATA_DIR, ROTORS_FILE, MODIFIERS_FILE);
+    printf("  1) Relative: %s/{%s}\n", REL_DATA_DIR, ROTORS_FILE);
+    printf("  2) User: $HOME%s/{%s}\n", USER_DATA_DIR_SUFFIX, ROTORS_FILE);
+    printf("  3) System: %s/{%s}\n\n", SYSTEM_DATA_DIR, ROTORS_FILE);
 
     printf("Examples:\n");
     printf("  %s -f input.txt -o out.txt -l 2\n", APP_NAME);
@@ -223,4 +185,26 @@ static void s_version() {
 
 static level_t s_get_level(const int level) {
     return (level_t)level;
+}
+
+static int s_get_random_int() {
+    uint8_t random_int;
+    const unsigned int max = 255/(ALPHA_LEN-1) * (ALPHA_LEN-1);
+
+    while (1) {
+        RAND_bytes(&random_int, sizeof(random_int));
+
+        if (random_int <= max)
+            return random_int % (ALPHA_LEN-1) + 1;
+    }
+}
+
+static int s_try_open_file(const char *path) {
+    FILE *f = fopen(path, "rb");
+    if (f != NULL) {
+        fclose(f);
+        snprintf(g_path_rotors, sizeof(g_path_rotors), "%s", path);
+        return 1;
+    }
+    return 0;
 }

@@ -44,29 +44,16 @@
  * - Proper error handling is implemented to address potential issues
  *   with file I/O operations.
  */
-void export_rotors();
+void rotors_export();
+void rotors_import();
 
 /**
- * @brief Exports the rotor modifier values to a binary file.
+ * @brief Checks the status of rotors and returns the result.
  *
- * This function writes the values of `g_rotors_modifier` to a binary file specified by the global variable `g_path_modifier`.
- * Each modifier value is written sequentially as binary data.
+ * This function verifies the state of rotors and returns a boolean value indicating
+ * whether the rotors are in a valid configuration for encryption/decryption.
  *
- * Global Variables:
- * - `g_rotors_modifier`:
- *   Integer values representing the modifiers for the rotors.
- * - `g_path_modifier`:
- *   A character array specifying the path to the binary file.
- *
- * Constants:
- * - `PATH_MAX_LEN`:
- *   The maximum allowable length for the file path string.
- *
- * Notes:
- * - The file is opened in binary write mode (`wb`).
- * - Proper error handling is implemented to ensure file operations succeed.
- * - The function outputs an error message using `perror` if the file cannot be opened.
+ * @return True if rotors are valid, false otherwise.
  */
-void export_modifiers();
-
+int rotors_check();
 #endif //ENIGMA_EXPORT_CONFIG_H
