@@ -5,38 +5,84 @@ decryption.
 
 ## Description
 
-This program implements a text encryption system inspired by the Enigma machine, using three configurable barrels 
-(rotors) and a reflector. It processes input text through multiple encryption stages to produce a secure encrypted
-output.
+This program implements a text encryption system inspired by the Enigma machine, using three configurable barrels
+(rotors) and a reflector. It processes input text through multiple encryption stages to produce an encrypted output.
 
-## Installation
+## Prerequisites (Linux)
+
+- A C compiler (GCC or Clang)
+- CMake 3.16+ (recommended)
+- Make or Ninja
+- OpenSSL (libcrypto) development files, because the program uses RAND_bytes()
+  - Debian/Ubuntu: sudo apt install libssl-dev
+  - Arch: sudo pacman -S openssl
+  - Fedora: sudo dnf install openssl-devel
+
+Runtime data: the project includes rotor data under bin/rotors_BIN.
+
+## Installation on Linux
 
 Using CMake (recommended):
 
-1. Configure and build
+1) Configure and build
    ```bash
    cmake -S . -B build
    cmake --build build
    ```
-2. Install
+
+2) Install (system-wide, default prefix /usr/local)
    ```bash
    sudo cmake --install build
    ```
-   - The executable will be installed to: /usr/local/bin/enigma (default prefix)
-   - The data files from ./bin (barrels_BIN, modifiers_BIN) will be installed to: ~/.local/share/enigma
+   This typically installs:
+   - Executable: /usr/local/bin/enigma
+   - Data: /usr/local/share/enigma/rotors_BIN (copied from ./bin/rotors_BIN)
+
+Install without sudo (user local prefix):
+   ```bash
+   cmake -S . -B build -DCMAKE_INSTALL_PREFIX="$HOME/.local"
+   cmake --build build
+   cmake --install build
+   # Ensure ~/.local/bin is in your PATH
+   ```
+   This installs:
+   - ~/.local/bin/enigma
+   - ~/.local/share/enigma/rotors_BIN
 
 Notes:
-- If you prefer a different system prefix, set it when configuring, for example:
+- You can change the prefix to any writable directory by setting -DCMAKE_INSTALL_PREFIX when configuring.
+- The build directory can be any name; build is used here for clarity.
+
+## Updating on Linux
+
+To update to the latest version from this source tree, simply rebuild and reinstall to the same prefix:
+```bash
+cmake -S . -B build
+cmake --build build
+# For system-wide
+sudo cmake --install build
+# Or for user prefix
+cmake --install build
+```
+This will overwrite the previously installed executable and refresh the data directory (rotors_BIN) as needed.
+
+## Uninstallation on Linux
+
+CMake generates an install manifest listing all installed files. From the same build directory you used to install:
+
+- System-wide uninstall:
   ```bash
-  cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/usr/local
+  sudo xargs rm -f < build/install_manifest.txt
   ```
-- You can also install without sudo by choosing a writable prefix (e.g., your home):
+
+- User prefix uninstall:
   ```bash
-  cmake -S . -B build -DCMAKE_INSTALL_PREFIX="$HOME/.local"
-  cmake --build build
-  cmake --install build
-  # Ensure ~/.local/bin is in your PATH
+  xargs rm -f < build/install_manifest.txt
   ```
+
+If you no longer have the build directory, you can manually remove typical locations:
+- Executable: /usr/local/bin/enigma or ~/.local/bin/enigma
+- Data directory: /usr/local/share/enigma or ~/.local/share/enigma (remove rotors_BIN inside)
 
 ## Usage
 
@@ -66,31 +112,43 @@ Examples:
   enigma --decrypt --file cipher.txt --output plain.txt
   ```
 
-Data files search order for barrels/modifiers:
-1) Relative: ../bin/{barrels_BIN, modifiers_BIN}
-2) User: $HOME/.local/share/enigma/{barrels_BIN, modifiers_BIN}
-3) System: /usr/local/share/enigma/{barrels_BIN, modifiers_BIN}
+Data files search order for rotors:
+1) Relative to executable run dir: ../bin/rotors_BIN
+2) User: $HOME/.local/share/enigma/rotors_BIN
+3) System: /usr/local/share/enigma/rotors_BIN
 
-Notes below describe the algorithmic behavior. The encrypted output will include three characters at the end
-representing the barrel positions used for encryption.
+Output format and keys:
+- On encryption, the output always starts with a two-letter level tag:
+  - LOW -> "LW"
+  - HIGH -> "HW"
+  - EXTREME -> "EX"
+- Immediately after the level tag, three A–Z letters (the rotor keys) are written before the actual encrypted text of the first block.
+- For LOW: keys are written once at the beginning of the file.
+- For HIGH: keys are written at the start of each line (before the line’s ciphertext).
+- For EXTREME: keys are written at the start of each whitespace-delimited block (before that block’s ciphertext).
 
-## Configuration
+Processing rules (from the current code):
+- Input is converted to uppercase; non-alphabetic characters (spaces, punctuation, digits, newlines) pass through unchanged in position and value.
+- Alphabetic characters are transformed by traversing three rotors, then a reflector, and then the inverse path back through the rotors. Between stages, per-rotor random shifts (modifiers) are applied.
 
-The barrel settings can be configured in the defines.h file:
+## Behavior details (as implemented)
 
-- BARREL_A: First rotor position (1–26)
-- BARREL_B: Second rotor position (1–26)
-- BARREL_C: Third rotor position (1–26)
-
-All barrel values must be between 1 and 26 to represent valid letter shifts.
+- Security level is selected at runtime with -l 1|2|3, not at compile time.
+- Rotor modifiers are random for each run/block using OpenSSL RAND_bytes(); they are not configured via constants.
+- Paragraph mode (-p):
+  - Creates a temporary input file with the provided text.
+  - Prints the resulting ciphertext/plaintext to stdout after processing.
+  - Removes the temporary input file afterwards.
+- --no-output-file:
+  - The program still writes to an output file during processing, but removes it at the end of the run. Combine with -p to only print to stdout without keeping a file.
 
 ## How It Works
 
-1. Input text is converted to uppercase
-2. Each character passes through:
-    - Barrel A encryption and rotation
-    - Barrel B encryption and rotation
-    - Barrel C encryption and rotation
-    - Reflector
-    - Reverse path through all barrels
-3. The final output includes the barrel positions as validation keys
+1. Input text is converted to uppercase.
+2. Each alphabetic character is processed by:
+   - Forward pass through three rotors (substitution via rotors_BIN definitions),
+   - Inter-rotor shifting using three random modifiers (1–26),
+   - Reflection (fixed mapping),
+   - Reverse pass back through the rotors and inverse shifts.
+3. Non-alphabetic characters are copied unchanged.
+4. The output begins with the level tag (LW/HW/EX) and, depending on level, prepends three key letters to the start of the file (LOW), each line (HIGH), or each whitespace-delimited block (EXTREME).

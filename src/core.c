@@ -15,30 +15,30 @@
 static char s__crypt(char letter, char (*change)(char, const comb_t[]), char (*connection)(char, int));
 
 /*======== ENCRYPT ========*/
-static void s_lower_encrypt();
-static void s_higher_encrypt();
-static void s_extreme_encrypt();
+static void s_lower_encrypt(); /**< Encrypt using lower level */
+static void s_higher_encrypt(); /**< Encrypt using higher level */
+static void s_extreme_encrypt(); /**< Encrypt using extreme level */
 
 /*======== DECRYPT ========*/
-static void s_lower_decrypt();
-static void s_higher_decrypt();
-static void s_extreme_decrypt();
+static void s_lower_decrypt(); /**< Decrypt using lower level */
+static void s_higher_decrypt(); /**< Decrypt using higher level */
+static void s_extreme_decrypt(); /**< Decrypt using extreme level */
 
 /*======== KEYS ========*/
-static void s_add_keys();
-static void s_get_keys();
+static void s_add_keys(); /**< Add keys to the rotor */
+static void s_get_keys(); /**< Get keys from the rotor */
 
 /*======== LEVEL ========*/
-static void s_add_level();
-static void s_get_level();
+static void s_add_level(); /**< Add level to the rotor */
+static void s_get_level(); /**< Get level from the rotor */
 
 /*======== CHANGE ========*/
-static char s_change_char(char letter, const comb_t rotor[]);
-static char s_unchange_char(char letter, const comb_t rotor[]);
+static char s_change_char(char letter, const comb_t rotor[]); /**< Change character representation */
+static char s_unchange_char(char letter, const comb_t rotor[]); /**< Change character representation */
 
 /*======== CONNECTORS ========*/
-static char s_connection(char letter, int move);
-static char s_inverse_connection(char letter, int move);
+static char s_connection(char letter, int move); /**< Connect character with rotor */
+static char s_inverse_connection(char letter, int move); /**< Connect character with rotor */
 
 
 /*======== EXTERN FUNCTIONS ========*/
@@ -76,14 +76,6 @@ void decrypt() {
             break;
         default: ;
     }
-}
-
-int check_rotors(){
-    for (int i=0; i<MAX_ROTORS-1; i++)
-        if (g_rotors_modifier[i]>ALPHA_LEN-1  || g_rotors_modifier[i]<1)
-            return 0;
-
-    return 1;
 }
 
 /*======== STATIC FUNCTIONS ========*/

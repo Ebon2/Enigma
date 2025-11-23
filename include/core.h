@@ -47,15 +47,5 @@ void encrypt();
  */
 void decrypt();
 
-/**
- * @brief Checks the status of rotors and returns the result.
- *
- * This function verifies the state of rotors and returns a boolean value indicating
- * whether the rotors are in a valid configuration for encryption/decryption.
- *
- * @return True if rotors are valid, false otherwise.
- */
-int check_rotors();
-
 #endif
 //functions
