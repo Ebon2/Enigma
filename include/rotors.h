@@ -1,50 +1,86 @@
 /**
- * @file export.h
+ * @file rotors.h
  * @brief This file contains functions for exporting configuration data to binary files.
  * @author Angel Rojas
  * @date 2024-11-10
- * @version 1.1
+ * @version 1.2
  * @details
  * This file serves as a repository for functions related to exporting configuration
  * data to binary files. It includes functions for writing rotor and reflector
  * configurations to a binary file.
  */
 
-#ifndef ENIGMA_EXPORT_CONFIG_H
-#define ENIGMA_EXPORT_CONFIG_H
+#ifndef ENIGMA_ROTORS_H
+#define ENIGMA_ROTORS_H
 
 /**
- * @brief Exports the rotors and reflector configurations to a binary file.
+ * @brief Exports rotor configurations to a binary file.
  *
- * This function writes the contents of the global rotor arrays (`g_rotors[0-2]`) and the reflector array (`g_rotors[3]`)
- * into a binary file specified by the global path variable `g_path_rotors`.
- * Each rotor and the reflector are written sequentially in binary format.
+ * This function writes the rotor configurations stored in the global array `g_rotors`
+ * to a binary file specified by the global file path variable `g_path_rotors`.
  *
- * If the file cannot be opened or there is an error during the process,
- * the function outputs an error message using `perror`.
+ * Each rotor's input-output mappings (`ccomb_t` structures in `g_rotors`) are sequentially
+ * written to the file for all rotors defined in `ROTORS_CANT`.
+ *
+ * Error handling includes:
+ * - If the file cannot be opened for writing, an error message is output using `perror`.
+ *
+ * Resource management includes:
+ * - Ensuring the file is properly closed after the write operation.
  *
  * Global Variables:
- * - `g_rotors[0-2]`:
- *   Arrays of type `comb_t` representing rotor configurations.
- * - `g_rotors[3]`:
- *   Array of type `comb_t` representing the reflector configuration.
  * - `g_path_rotors`:
- *   A character array specifying the file path for writing the binary data.
+ *   A string representing the file path where the rotor configurations will be saved.
+ * - `g_rotors[MAX_ROTORS][ALPHA_LEN]`:
+ *   A two-dimensional array of `ccomb_t` structures, representing the input-output mapping
+ *   of each rotor and the reflector.
  *
  * Constants:
  * - `ALPHA_LEN`:
- *   The fixed size of the rotor and reflector arrays.
- * - `PATH_MAX_LEN`:
- *   The maximum length of the file path string.
+ *   Fixed size of input-output character mappings handled by each rotor.
+ * - `MAX_ROTORS`:
+ *   Represents the number of rotors, including the reflector.
  *
  * Notes:
- * - The file is opened in binary write mode (`wb`).
- * - Each `comb_t` structure consists of two characters (`input` and `output`),
- *   which are written in their raw binary form.
- * - Proper error handling is implemented to address potential issues
- *   with file I/O operations.
+ * - The binary file is written in a format aligned with the `ccomb_t` structure.
+ * - Each rotor's configuration is written sequentially, enabling consistent formatting.
  */
 void rotors_export();
+
+/**
+ * @brief Imports rotor and reflector configurations from a binary file.
+ *
+ * This function reads the rotor configurations from a binary file specified
+ * by the global file path variable `g_path_rotors` into the static `s_rotors` array.
+ * It reads data for all rotors and the reflector (specified by the configuration in `s_rotors`)
+ * and applies the data to the internal structures used by the program.
+ *
+ * If the file cannot be opened or an error occurs during the read operation,
+ * an appropriate error message is displayed using `perror`.
+ *
+ * Post-read, the function calls `s_change_char()` to perform further
+ * processing or validation on the imported configuration data.
+ *
+ * Global Variables:
+ * - `g_path_rotors`:
+ *   A character array representing the file path used for binary file import.
+ *
+ * Static Variables:
+ * - `s_rotors[MAX_ROTORS][ALPHA_LEN]`:
+ *   A two-dimensional array of type `icomb_t` (integer combinations), which stores imported data
+ *   representing rotor and reflector configurations.
+ *
+ * Constants:
+ * - `ALPHA_LEN`:
+ *   The fixed size representing the number of input-output mappings for a rotor.
+ * - `MAX_ROTORS`:
+ *   Represents the number of rotors, including the reflector.
+ *
+ * Notes:
+ * - The binary file should be formatted correctly to match the `icomb_t` structure.
+ * - The `fread` function loads the complete rotor configuration in a single operation.
+ * - Proper file closure (`fclose`) ensures resources are released after reading.
+ */
 void rotors_import();
 
 /**
@@ -56,4 +92,7 @@ void rotors_import();
  * @return True if rotors are valid, false otherwise.
  */
 int rotors_check();
-#endif //ENIGMA_EXPORT_CONFIG_H
+
+void u_print_barrels();
+
+#endif //ENIGMA_ROTORS_H

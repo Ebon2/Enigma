@@ -3,7 +3,7 @@
  * @brief This file contains the enums and data structures.
  * @author Angel Rojas
  * @date 2024-11-10
- * @version 1.1
+ * @version 1.2
  * @details
  * This file serves as a repository for data structures used throughout the program.
  * It includes definitions for barrel and reflector configurations, file paths, and
@@ -14,7 +14,6 @@
 #define structures_H
 
 /**
- * @enum mod_t
  * @brief Enumerates encryption or decryption.
  */
 typedef enum {
@@ -23,7 +22,6 @@ typedef enum {
 } mod_t;
 
 /**
- * @enum level_t
  * @brief Enumerates different levels of encryption or decryption.
  */
 typedef enum {
@@ -34,21 +32,19 @@ typedef enum {
 } level_t;
 
 /**
- * @struct comb_t
  * @brief Represents a character combination for encryption or decryption.
  */
 typedef struct {
     char input; /**< Represents a single character input to be processed. */
     char output; /**< Represents a single character output resulting from processing. */
-} comb_t;
+} ccomb_t;
 
 /**
- * @struct int_comb_t
  * @brief Represents a character combination for encryption or decryption in format int.
  */
 typedef struct {
     int input; /**< Represents a single character input to be processed in format int. */
     int output; /**< Represents a single character output resulting from processing in format int. */
-} int_comb_t;
+} icomb_t;
 
 #endif

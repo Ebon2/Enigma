@@ -2,16 +2,16 @@
  * @file core.h
  * @brief This file contains the main entry point for the program.
  * @author Angel Rojas
- * @date 2024-11-10
- * @version 1.1
+ * @date 2025-11-22
+ * @version 1.2
  * @details
  * This file contains the main entry point for the program, orchestrating
  * the execution flow and coordinating various components such as file processing,
  * argument handling, and encryption/decryption operations.
  */
 
-#ifndef functions_H
-#define functions_H
+#ifndef ENIGMA_CORE_H
+#define ENIGMA_CORE_H
 
 /**
  * @brief Executes the encryption process based on the current encryption level.
@@ -47,5 +47,4 @@ void encrypt();
  */
 void decrypt();
 
-#endif
-//functions
+#endif //ENIGMA_CORE_H
