@@ -4,25 +4,30 @@
 
 #include "../include/rotors.h"
 #include "../include/globals.h"
+#include "../include/utils.h"
 
 #include <stdio.h>
 
 static void s_change_char(); /**< Change the character representation of rotors */
+static icomb_t s_rotors [ROTORS_CANT][ALPHA_LEN];
 
 void rotors_export() {
     FILE *file = fopen(g_path_rotors, "wb");
+
     if (!file) {
         perror("Error opening rotors file for writing");
         return;
     }
 
-    for (int i = 0; i < MAX_ROTORS; i++)
-        fwrite(g_rotors[i], sizeof(comb_t), ALPHA_LEN, file);
+    for (int i = 0; i < ROTORS_CANT; i++)
+        u_xor_crypt((uint8_t*)&g_rotors[i], sizeof(g_rotors[i]));
+
+    for (int i = 0; i < ROTORS_CANT; i++)
+        fwrite(g_rotors[i], sizeof(ccomb_t), ALPHA_LEN, file);
 
     fclose(file);
 }
 
-static int_comb_t s_rotors [MAX_ROTORS][ALPHA_LEN];
 
 
 void rotors_import() {
@@ -32,15 +37,19 @@ void rotors_import() {
         return;
     }
 
-    fread(s_rotors, sizeof(int_comb_t), ALPHA_LEN * MAX_ROTORS, file);
+    for (int i = 0; i < ROTORS_CANT; i++)
+        fread(g_rotors[i], sizeof(ccomb_t), ALPHA_LEN, file);
+
+
+    for (int i = 0; i < ROTORS_CANT; i++)
+        u_xor_crypt((uint8_t*)&g_rotors[i], sizeof(g_rotors[i]));
 
     fclose(file);
-
-    s_change_char();
+    // s_change_char();
 }
 
 int rotors_check(){
-    for (int i=0; i<MAX_ROTORS-1; i++)
+    for (int i=0; i<ROTORS_CANT-1; i++)
         if (g_rotors_modifier[i]>ALPHA_LEN-1  || g_rotors_modifier[i]<1)
             return 0;
 
@@ -48,7 +57,7 @@ int rotors_check(){
 }
 
 static void s_change_char() {
-    for (int i = 0; i < MAX_ROTORS; i++)
+    for (int i = 0; i < ROTORS_CANT; i++)
         for (int j = 0; j < ALPHA_LEN; j++) {
             g_rotors[i][j].input = (char)s_rotors[i][j].input;
             g_rotors[i][j].output = (char)s_rotors[i][j].output;

@@ -42,6 +42,9 @@ void u_init_program(const int argc, char *argv[]) {
     s_rotors_path();
     s_process_args(argc, argv);
     rotors_import();
+
+    if (!rotors_check()) exit(1);
+
     u_change_rotors();
 
     if (g_paragraph) {
@@ -78,7 +81,7 @@ void s_process_file() {
 }
 
 void u_change_rotors() {
-    for (int i=0; i<MAX_ROTORS-1; i++)
+    for (int i=0; i<ROTORS_CANT-1; i++)
         g_rotors_modifier[i] = s_get_random_int();
 }
 
@@ -91,6 +94,13 @@ void u_create_file(char name[]) {
         fputs(g_input_paragraph, file);
         fclose(file);
     }
+}
+
+void u_xor_crypt(uint8_t *data, size_t len) {
+    const size_t key_len = strlen(g_KEY_ACCESS);
+
+    for (size_t i=0; i<len; i++)
+        data[i] ^= g_KEY_ACCESS[i % key_len];
 }
 
 static int s_is_valid_level(const int level) {
@@ -134,7 +144,7 @@ static void s_init_globals(const int opt) {
 }
 
 static void s_rotors_path() {
-    char candidate[PATH_MAX_LEN];
+    char candidate[MAX_PATH_LEN];
 
     // 1) Try a relative path (development tree)
     snprintf(candidate, sizeof(candidate), "%s/%s", REL_DATA_DIR, ROTORS_FILE);

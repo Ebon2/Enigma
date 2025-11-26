@@ -12,7 +12,7 @@
 
 
 /*======== MASTER FUNCTION ========*/
-static char s__crypt(char letter, char (*change)(char, const comb_t[]), char (*connection)(char, int));
+static char s__crypt(char letter, char (*change)(char, const ccomb_t[]), char (*connection)(char, int));
 
 /*======== ENCRYPT ========*/
 static void s_lower_encrypt(); /**< Encrypt using lower level */
@@ -33,8 +33,8 @@ static void s_add_level(); /**< Add level to the rotor */
 static void s_get_level(); /**< Get level from the rotor */
 
 /*======== CHANGE ========*/
-static char s_change_char(char letter, const comb_t rotor[]); /**< Change character representation */
-static char s_unchange_char(char letter, const comb_t rotor[]); /**< Change character representation */
+static char s_change_char(char letter, const ccomb_t rotor[]); /**< Change character representation */
+static char s_unchange_char(char letter, const ccomb_t rotor[]); /**< Change character representation */
 
 /*======== CONNECTORS ========*/
 static char s_connection(char letter, int move); /**< Connect character with rotor */
@@ -81,19 +81,18 @@ void decrypt() {
 /*======== STATIC FUNCTIONS ========*/
 
 /*======== MASTER FUNCTION ========*/
-char s__crypt(char letter, char (*change)(char, const comb_t[]), char (*connection)(char, int)) {
+char s__crypt(char letter, char (*change)(char, const ccomb_t[]), char (*connection)(char, int)) {
     if (!isalpha(letter))
         return letter;
 
-    int i;
-    for (i=0; i<MAX_ROTORS-1; i++) {
+    for (int i=0; i<ROTORS_CANT-1; i++) {
         letter = change(letter, g_rotors[i]);
         letter = connection(letter, g_rotors_modifier[i]);
     }
 
-    letter = change(letter, g_rotors[MAX_ROTORS-1]);
+    letter = change(letter, g_rotors[ROTORS_CANT-1]);
 
-    for (i=MAX_ROTORS-2; i>=0; i--) {
+    for (int i=ROTORS_CANT-2; i>=0; i--) {
         letter = connection(letter, g_rotors_modifier[i]);
         letter = change(letter, g_rotors[i]);
     }
@@ -178,12 +177,12 @@ static void s_extreme_decrypt() {
 
 /*======== KEYS ========*/
 static void s_add_keys() {
-    for (int i=0; i<MAX_ROTORS-1; i++)
+    for (int i=0; i<ROTORS_CANT-1; i++)
         fputc((char)(g_rotors_modifier[i]+64), g_output_file);
 }
 
 static void s_get_keys() {
-    for (int i=0; i<MAX_ROTORS-1; i++)
+    for (int i=0; i<ROTORS_CANT-1; i++)
         g_rotors_modifier[i] = fgetc(g_input_file) - 64;
 }
 
@@ -215,7 +214,7 @@ static void s_get_level() {
 }
 
 /*======== CHANGE ========*/
-static char s_change_char(const char letter, const comb_t rotor[]){
+static char s_change_char(const char letter, const ccomb_t rotor[]){
     int i=0;
 
     while (rotor[i].input != letter && rotor[i].input != ' ')
@@ -224,7 +223,7 @@ static char s_change_char(const char letter, const comb_t rotor[]){
     return rotor[i].output;
 }
 
-static char s_unchange_char(const char letter, const comb_t rotor[]){
+static char s_unchange_char(const char letter, const ccomb_t rotor[]){
     int i=0;
 
     while (rotor[i].output != letter && rotor[i].output != ' ')

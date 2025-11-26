@@ -14,7 +14,6 @@
 #include "../include/globals.h"
 #include "../include/structures.h"
 #include "../include/utils.h"
-#include "../include/rotors.h"
 
 /**
  * The entry point of the program. This function initializes necessary resources,
@@ -27,8 +26,6 @@
  */
 int main(const int argc, char *argv[]) {
     u_init_program(argc, argv);
-
-    rotors_check();
 
     if (g_mode == ENCRYPT)
         encrypt();
